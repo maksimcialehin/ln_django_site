@@ -1,0 +1,92 @@
+{% extends 'business_apps/_base.html' %}
+{% load crispy_forms_tags %}
+{% load apps_tags %}
+
+{% block content %}
+    <div class="container justify-content-center">
+        <form method="get" action="{% url 'home' %}">
+            {% csrf_token %}
+            <button type="submit" name="paginate_by" value="10" class="btn btn-outline-secondary">By 10 page</button>
+            <button type="submit" name="paginate_by" value="20" class="btn btn-outline-secondary">By 20 page</button>
+        </form>
+    </div>
+
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?{% param_replace page=1 %}">&laquo; First</a></li>
+            <li class="page-item"><a class="page-link"  href="?{% param_replace page=page_obj.previous_page_number %}">Previous page</a></li>
+        {% endif %}
+        
+        <li class="page-item disabled"><span class="page-link">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span></li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link"  href="?{% param_replace page=page_obj.next_page_number %}">Next page</a></li>
+            <li class="page-item"><a class="page-link"  href="?{% param_replace page=paginator.num_pages %}">Last &raquo;</a></li>
+        {% endif %}
+
+    </ul>
+
+
+
+    {% if apps %}
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Application name</th>
+                    <th scope="col">Company name</th>
+                    <th scope="col">Release year</th>
+                    <th scope="col">Contact email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in apps %}
+                <tr>
+                    <td>{{ app.id }}</td>
+                    <td><a href="{{ app.get_absolute_url }}">{{ app.app_name }}</a></td>
+                    <td>{{ app.company_name }}</td>
+                    <td>{{ app.release_year }}</td>
+                    <td>{{ app.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?{% param_replace page=1 %}">&laquo; First</a></li>
+                    <li class="page-item"><a class="page-link"  href="?{% param_replace page=page_obj.previous_page_number %}">Previous page</a></li>
+                {% endif %}
+                
+                <li class="page-item disabled"><span class="page-link">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span></li>
+        
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link"  href="?{% param_replace page=page_obj.next_page_number %}">Next page</a></li>
+                    <li class="page-item"><a class="page-link"  href="?{% param_replace page=paginator.num_pages %}">Last &raquo;</a></li>
+                {% endif %}
+
+        </ul>
+    {% else %}
+        <p>Sorry we do not have such data</p>
+    {% endif %}
+
+
+
+    <div class="form-row">
+        <div class="form-group col-6">
+            <form method="get">
+                {% csrf_token %}
+                {% comment %} {{ filter.form|crispy }} {% endcomment %}
+                {{ form.company_name }}
+                <button type="submit" name="button" class="btn btn-secondary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}
