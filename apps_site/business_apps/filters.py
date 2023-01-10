@@ -12,13 +12,13 @@ class AppFilter(django_filters.FilterSet):
     o = django_filters.OrderingFilter(
         # tuple-mapping retains order
         fields=(
-            ('release_year', 'release_year'),
+            ('release_year', 'Release year'),
         ),
 
         # labels do not need to retain order
-        # field_labels={
-        #     'username': 'User account',
-        # }
+        field_labels={
+            'release_year': 'Release year',
+        }
     )
 
     class Meta:
